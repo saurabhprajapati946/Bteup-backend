@@ -1,8 +1,11 @@
 FROM node:18-slim
 
+# Puppeteer Chromium Dependencies
 RUN apt-get update && apt-get install -y \
     chromium \
     chromium-driver \
+    ca-certificates \
+    fonts-liberation \
     libappindicator3-1 \
     libasound2 \
     libatk-bridge2.0-0 \
@@ -35,9 +38,12 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libxss1 \
     libxtst6 \
+    wget \
+    xdg-utils \
     --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
 COPY package.json .
 RUN npm install
 
