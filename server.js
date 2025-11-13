@@ -1,7 +1,18 @@
 const express = require("express");
-const routes = require("./routes/pdfRoutes");
+const cors = require("cors");
 const app = express();
+
+app.use(cors());  // <-- FIXED!
 app.use(express.json());
-app.get("/", (req,res)=>res.send("BTEUP Backend Running"));
-app.use("/api/pdf", routes);
-app.listen(process.env.PORT||3000);
+
+// routes
+const pdfRoutes = require("./routes/pdfRoutes");
+app.use("/api/pdf", pdfRoutes);
+
+app.get("/", (req, res) => {
+  res.send("BTEUP Backend Running");
+});
+
+app.listen(process.env.PORT || 3000, () =>
+  console.log("Server running")
+);
