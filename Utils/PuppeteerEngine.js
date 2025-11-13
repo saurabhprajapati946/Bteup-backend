@@ -1,25 +1,22 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const config = require("../config");
 
 exports.generatePDF = async (roll, type) => {
   const url = config.baseURLs[type] + roll;
 
   const browser = await puppeteer.launch({
+    executablePath: "/usr/bin/chromium",
     headless: "new",
-    args: ["--no-sandbox", "--disable-gpu"],
+    args: [
+      "--no-sandbox",
+      "--disable-gpu",
+      "--disable-dev-shm-usage",
+      "--disable-setuid-sandbox"
+    ]
   });
 
   const page = await browser.newPage();
-  await page.goto(url, {
-    waitUntil: "networkidle2",
-    timeout: config.timeout
-  });
-
-  const check = await page.evaluate(() => document.body.innerText);
-  if (check.length < 100) {
-    await browser.close();
-    throw new Error("Invalid or empty page");
-  }
+  await page.goto(url, { waitUntil: "networkidle2", timeout: 25000 });
 
   const pdf = await page.pdf({
     format: "A4",
