@@ -1,4 +1,4 @@
-const puppeteer=require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const config=require("../config");
 exports.generatePDF=async(roll,type)=>{
  const url=config.baseURLs[type]+roll;
